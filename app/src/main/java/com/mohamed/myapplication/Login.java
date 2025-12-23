@@ -32,7 +32,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String message = "Login Successful\n" + "Email: " + email.getText().toString() + "\n" +"Password: "+ pass.getText().toString();
-                Log.d("MyApp", message);
+                Log.d("MyApp123", message);
                 Intent n = new Intent(Login.this, MainActivity.class);
                 startActivity(n);
 
