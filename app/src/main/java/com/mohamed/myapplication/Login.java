@@ -1,6 +1,7 @@
 package com.mohamed.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,19 +26,36 @@ public class Login extends AppCompatActivity {
         EditText email = findViewById(R.id.emailFieldLogin);
         EditText pass = findViewById(R.id.passFieldLogin);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("User_Data", MODE_PRIVATE);
 
+        String savedFName = sharedPreferences.getString("fname", "");
+        String savedLName = sharedPreferences.getString("lname", "");
+        String savedEmail = sharedPreferences.getString("email", "");
+        String savedPass = sharedPreferences.getString("pass", "");
 
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                String message = "Login Successful\n" + "Email: " + email.getText().toString() + "\n" +"Password: "+ pass.getText().toString();
-                Log.d("MyApp123", message);
-                Intent n = new Intent(Login.this, MainActivity.class);
-                startActivity(n);
+            public void onClick(View v) {
+
+                String emailData = email.getText().toString().trim();
+                String passData = pass.getText().toString().trim();
+
+                Log.d("LoginPage", "User "+savedFName+" "+savedLName+" Logged In");
+
+                if(emailData.equals(savedEmail) && passData.equals(savedPass)){
+                    Intent n = new Intent(Login.this, MainActivity.class);
+                    startActivity(n);
+                }
+                else{
+                    Log.d("LoginPage", "Login Failed");
+                }
+
+
 
             }
         });
+
 
     }
 }
