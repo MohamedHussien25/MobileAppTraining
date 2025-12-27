@@ -1,6 +1,7 @@
 package com.mohamed.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +28,10 @@ public class Register extends AppCompatActivity {
         EditText email = findViewById(R.id.emailFieldReg);
         EditText pass = findViewById(R.id.passFieldReg);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("User_Data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
 
 
 
@@ -35,11 +40,22 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String message = "Registration Successful\n" + "Full Name: " + fName.getText().toString() + " " + lName.getText().toString() + "\n" +
-                        "Email: " + email.getText().toString() + "\n" +"Password: "+ pass.getText().toString();
-                Log.d("MyApp", message);
+                String fnameData = fName.getText().toString().trim();
+                String lnameData = lName.getText().toString().trim();
+                String emailData = email.getText().toString().trim();
+                String passData = pass.getText().toString().trim();
+
+                editor.putString("fname", fnameData);
+                editor.putString("lname", lnameData);
+                editor.putString("email", emailData);
+                editor.putString("pass", passData);
+                editor.apply();
+
+                Log.d("RegisterPage", "User Data\n"+fnameData+"\n"+lnameData+"\n"+emailData+"\n"+passData+" Registered");
+
                 Intent n = new Intent(Register.this, Login.class);
                 startActivity(n);
+
 
             }
         });
