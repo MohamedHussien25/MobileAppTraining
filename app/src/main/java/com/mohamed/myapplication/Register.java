@@ -1,26 +1,31 @@
 package com.mohamed.myapplication;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class Register extends AppCompatActivity {
-
+    DatabaseHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
+
+        db = new DatabaseHelper(this);
+
+        NavBarFunctions navBarFunctions = new NavBarFunctions();
+        LinearLayout navLogin = findViewById(R.id.navLogin);
+        LinearLayout navHome = findViewById(R.id.navHome);
+        LinearLayout navRegister = findViewById(R.id.navRegister);
 
         Button regBtn = findViewById(R.id.regBtn);
         EditText fName = findViewById(R.id.fNameField);
@@ -28,36 +33,52 @@ public class Register extends AppCompatActivity {
         EditText email = findViewById(R.id.emailFieldReg);
         EditText pass = findViewById(R.id.passFieldReg);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("User_Data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-
-
-
 
 
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String fnameData = fName.getText().toString().trim();
-                String lnameData = lName.getText().toString().trim();
+                String fNameData = fName.getText().toString().trim();
+                String lNameData = lName.getText().toString().trim();
                 String emailData = email.getText().toString().trim();
                 String passData = pass.getText().toString().trim();
 
-                editor.putString("fname", fnameData);
-                editor.putString("lname", lnameData);
-                editor.putString("email", emailData);
-                editor.putString("pass", passData);
-                editor.apply();
 
-                Log.d("RegisterPage", "User Data\n"+fnameData+"\n"+lnameData+"\n"+emailData+"\n"+passData+" Registered");
+                boolean inserted = db.insertUser(fNameData, lNameData, emailData, passData);
 
-                Intent n = new Intent(Register.this, Login.class);
-                startActivity(n);
+                if (inserted) {
+                    Toast.makeText(getApplicationContext(), "Registered Successfully", Toast.LENGTH_SHORT).show();
+                    Intent n = new Intent(Register.this, Login.class);
+                    startActivity(n);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Registration Failed", Toast.LENGTH_SHORT).show();
+                }
 
 
             }
         });
+
+        navHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navBarFunctions.navHome(Register.this);
+            }
+        });
+
+        navLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navBarFunctions.navLogin(Register.this);
+            }
+        });
+
+        navRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navBarFunctions.navRegister(Register.this);
+            }
+        });
     }
+
 }

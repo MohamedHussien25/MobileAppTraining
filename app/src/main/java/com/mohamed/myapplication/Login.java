@@ -1,12 +1,13 @@
 package com.mohamed.myapplication;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,43 +17,67 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class Login extends AppCompatActivity {
 
+    DatabaseHelper db;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
+        NavBarFunctions navBarFunctions = new NavBarFunctions();
+        LinearLayout navLogin = findViewById(R.id.navLogin);
+        LinearLayout navHome = findViewById(R.id.navHome);
+        LinearLayout navRegister = findViewById(R.id.navRegister);
+
+        db = new DatabaseHelper(this);
         Button loginBtn = findViewById(R.id.loginBtn);
         EditText email = findViewById(R.id.emailFieldLogin);
         EditText pass = findViewById(R.id.passFieldLogin);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("User_Data", MODE_PRIVATE);
 
-        String savedFName = sharedPreferences.getString("fname", "");
-        String savedLName = sharedPreferences.getString("lname", "");
-        String savedEmail = sharedPreferences.getString("email", "");
-        String savedPass = sharedPreferences.getString("pass", "");
 
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
 
                 String emailData = email.getText().toString().trim();
                 String passData = pass.getText().toString().trim();
 
-                Log.d("LoginPage", "User "+savedFName+" "+savedLName+" Logged In");
+                boolean loggedIn = db.checkUser(emailData, passData);
 
-                if(emailData.equals(savedEmail) && passData.equals(savedPass)){
+                if (loggedIn) {
+                    Toast.makeText(getApplicationContext(), "Login Success", Toast.LENGTH_SHORT).show();
                     Intent n = new Intent(Login.this, MainActivity.class);
                     startActivity(n);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Invalid Credentials", Toast.LENGTH_SHORT).show();
                 }
-                else{
-                    Log.d("LoginPage", "Login Failed");
-                }
 
 
+            }
+        });
 
+        navHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navBarFunctions.navHome(Login.this);
+            }
+        });
+
+        navLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navBarFunctions.navLogin(Login.this);
+            }
+        });
+
+        navRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navBarFunctions.navRegister(Login.this);
             }
         });
 
