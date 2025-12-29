@@ -32,6 +32,13 @@
             android:backgroundTint="@color/fresh_sky"
             android:id="@+id/loginBtnHome"
             />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show All Users"
+            android:backgroundTint="@color/fresh_sky"
+            android:id="@+id/usersBtnHome"
+            />
 </LinearLayout>
 
     <LinearLayout

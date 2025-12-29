@@ -2,6 +2,7 @@ package com.mohamed.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.mohamed.myapplication.recyclerviewusers.ViewUsers;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        DatabaseHelper db = new DatabaseHelper(MainActivity.this);
 
         NavBarFunctions navBarFunctions = new NavBarFunctions();
         LinearLayout navLogin = findViewById(R.id.navLogin);
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button regBtn = findViewById(R.id.regBtnHome);
         Button loginBtn = findViewById(R.id.loginBtnHome);
+        Button usersBtn = findViewById(R.id.usersBtnHome);
+
 
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +53,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent n = new Intent(MainActivity.this, Login.class);
+                startActivity(n);
+
+            }
+        });
+        usersBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent n = new Intent(MainActivity.this, ViewUsers.class);
                 startActivity(n);
 
             }
@@ -73,6 +87,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
+
 }

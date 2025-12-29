@@ -6,6 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.mohamed.myapplication.recyclerviewusers.UsersData;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Info
@@ -74,5 +79,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllUsers() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+    }
+    public List<UsersData> getAllUsersList() {
+        List<UsersData> users = new ArrayList<>();
+
+        Cursor cursor = getAllUsers();
+
+        if (cursor.moveToFirst()) {
+            do {
+                String fname = cursor.getString(cursor.getColumnIndexOrThrow(COL_FNAME));
+                String lname = cursor.getString(cursor.getColumnIndexOrThrow(COL_LNAME));
+                String email = cursor.getString(cursor.getColumnIndexOrThrow(COL_EMAIL));
+                String password = cursor.getString(cursor.getColumnIndexOrThrow(COL_PASSWORD));
+
+                users.add(new UsersData(fname, lname, email, password));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return users;
     }
 }
